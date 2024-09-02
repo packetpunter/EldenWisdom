@@ -126,7 +126,7 @@ with gr.Blocks() as eldenWisdom:
                 ]
                 
             with gr.Column():
-                help = gr.Markdown("## Enter your existing experience, and the amount of runes you want to use, to find out if it's enough/would matter. Skip to just find out how much your runes add up to.")
+                help = gr.Markdown("### Enter your existing experience, and the amount of runes you want to use, to find out if it's enough/would matter. Skip to just find out how much your runes add up to.")
                 outputs=[gr.Textbox(label="Output", lines=2)]
                 submit = gr.Button("Submit")
                 submit.click(fn, inputs, outputs)
@@ -140,7 +140,7 @@ with gr.Blocks() as eldenWisdom:
                 ]
             with gr.Column():
                 gr.Markdown("# Levels")
-                gr.Markdown("## This section is meant to show how much experience you need to go from one level to the one you'd like to be at.")
+                gr.Markdown("### This section is meant to show how much experience you need to go from one level to the one you'd like to be at.")
                 outputs=[gr.Textbox(label="Output", lines=2)]
                 submit = gr.Button("Submit")
                 submit.click(fn, inputs, outputs)
