@@ -2,10 +2,18 @@
 import gradio as gr
 import csv
 
-title="# Elden Wisdom App"
+title="Elden Wisdom App"
+
+theme = gr.themes.Glass(
+    primary_hue="gray",
+    neutral_hue="sky",
+    text_size="lg",
+    font=[gr.themes.GoogleFont('Cinzel'), 'Candara', 'Noto Sans', 'source-sans-pro'],
+)
+
 def load_runes():
     _all_stones = []
-    with open('stones.csv') as csvfile:
+    with open('runes.csv') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             _all_stones.append(row)
@@ -28,6 +36,7 @@ def levelCalc(start, desired):
         _exp = exp_desired - exp_start
         return f"You want to go from Lv{start} to Lv{desired}, which will take {_exp:,} runes."
     else: return f"Please re-adjust the slider to have the desired level be higher than your current level."
+
 def calculate(
         CurrentExp,
         GoldenRune_1, 
@@ -95,9 +104,9 @@ def calculate(
     else: return f"Your Selected runes will add up to {_summed_exp:,} experience."
     #return tabulate.tabulate(data, headers='firstrow', tablefmt='simple')
 
-with gr.Blocks() as eldenWisdom:
-    gr.Markdown(title)
-    gr.Markdown("## Please find the tabs below to help inform you about necessities in Elden Ring.")
+with gr.Blocks(theme=theme, title=title) as eldenWisdom:
+    gr.Markdown("# " + title)
+    gr.Markdown("### Please find the tabs below to help inform you about necessities in Elden Ring.")
     with gr.Tab("RUNES"):
         with gr.Row():
             with gr.Column():
@@ -117,16 +126,16 @@ with gr.Blocks() as eldenWisdom:
                     gr.Slider(label="Number of Golden Rune 11s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_11,
                     gr.Slider(label="Number of Golden Rune 12s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_12,
                     gr.Slider(label="Number of Golden Rune 13s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_13,
-                    gr.Slider(label="Number of Hero Rune 1s", value=0, minimum=0, maximum=50, step=1), #HeroRune_1,
-                    gr.Slider(label="Number of Hero Rune 2s", value=0, minimum=0, maximum=50, step=1), #HeroRune_2,
-                    gr.Slider(label="Number of Hero Rune 3s", value=0, minimum=0, maximum=50, step=1), #HeroRune_3,
-                    gr.Slider(label="Number of Hero Rune 4s", value=0, minimum=0, maximum=50, step=1), #HeroRune_4,
-                    gr.Slider(label="Number of Hero Rune 5s", value=0, minimum=0, maximum=50, step=1), #HeroRune_5,
-                    gr.Slider(label="Number of Lord Runes", value=0, minimum=0, maximum=50, step=1), #LordRune,
+                    gr.Slider(label="Number of Hero Rune 1s", value=0, minimum=0, maximum=20, step=1), #HeroRune_1,
+                    gr.Slider(label="Number of Hero Rune 2s", value=0, minimum=0, maximum=20, step=1), #HeroRune_2,
+                    gr.Slider(label="Number of Hero Rune 3s", value=0, minimum=0, maximum=20, step=1), #HeroRune_3,
+                    gr.Slider(label="Number of Hero Rune 4s", value=0, minimum=0, maximum=20, step=1), #HeroRune_4,
+                    gr.Slider(label="Number of Hero Rune 5s", value=0, minimum=0, maximum=20, step=1), #HeroRune_5,
+                    gr.Slider(label="Number of Lord Runes", value=0, minimum=0, maximum=10, step=1), #LordRune,
                 ]
                 
             with gr.Column():
-                help = gr.Markdown("### Enter your existing experience, and the amount of runes you want to use, to find out if it's enough/would matter. Skip to just find out how much your runes add up to.")
+                gr.TextArea(label="How to Use", value="Enter your existing experience, and the amount of runes you want to use, to find out if you have enough runes. \n\nSkip entering any experience (and just use the sliders) to just find out how much your runes add up to. \n\nThe Levels tab can inform you how many runes you need to level up to your desired level.")
                 outputs=[gr.Textbox(label="Output", lines=2)]
                 submit = gr.Button("Submit")
                 submit.click(fn, inputs, outputs)
@@ -139,10 +148,13 @@ with gr.Blocks() as eldenWisdom:
                     gr.Slider(label="Desired Level", value=25, minimum=1, maximum=713, step=1)
                 ]
             with gr.Column():
-                gr.Markdown("# Levels")
-                gr.Markdown("### This section is meant to show how much experience you need to go from one level to the one you'd like to be at.")
+                gr.TextArea(label="How to Use", value="This section is meant to show how much experience you need to go from one level to the one you'd like to be at.")
                 outputs=[gr.Textbox(label="Output", lines=2)]
                 submit = gr.Button("Submit")
                 submit.click(fn, inputs, outputs)
+    with gr.Tab("INFO"):
+        gr.Markdown("# Information about the data")
+        _msg = "This application utilizes the work tirelylessly completed by the authors of the EldenRing Wiki page on Fextalife. \n\nHere is the direct link: https://eldenring.wiki.fextralife.com/Golden+Runes. \n\nThe data used from here is namely on one of the Golden Rune pages, it's  a table that's been converted into memory for this application. \n\n There is also a second page on this wiki that has done the same for leveling information, which was cut up by this application and stored in memory for calculations on the Levels tab. \n\n Here is the link: https://eldenring.wiki.fextralife.com/Level. \n\n Thanks to all who did this work prior!"
+        gr.TextArea(label="Data Used", interactive=False,value=_msg, lines=15)
 
-eldenWisdom.launch(share=True) 
+eldenWisdom.launch(share=False, show_api=False, enable_monitoring=False, inbrowser=True, debug=False) 
