@@ -1,0 +1,5 @@
+{
+    "azureAutomation.directory.basePath": "Users/blue/code/python/EldenWisdom",
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/e69f83f4-9273-4f5c-9963-b11b400484aa/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/eldenwisdomdevjb",
+    "appService.deploySubpath": "."
+}
