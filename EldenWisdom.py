@@ -157,4 +157,4 @@ with gr.Blocks(theme=theme, title=title) as eldenWisdom:
         _msg = "This application utilizes the work tirelylessly completed by the authors of the EldenRing Wiki page on Fextalife. \n\nHere is the direct link: https://eldenring.wiki.fextralife.com/Golden+Runes. \n\nThe data used from here is namely on one of the Golden Rune pages, it's  a table that's been converted into memory for this application. \n\n There is also a second page on this wiki that has done the same for leveling information, which was cut up by this application and stored in memory for calculations on the Levels tab. \n\n Here is the link: https://eldenring.wiki.fextralife.com/Level. \n\n Thanks to all who did this work prior!"
         gr.TextArea(label="Data Used", interactive=False,value=_msg, lines=15)
 
-eldenWisdom.launch(share=False, show_api=False, enable_monitoring=False, inbrowser=True, debug=False) 
+#eldenWisdom.launch(share=False, show_api=False, enable_monitoring=False, inbrowser=True, debug=False) 
