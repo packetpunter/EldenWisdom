@@ -37,19 +37,27 @@ def load_farming():
                 farmingDict[row[0]] = int(row[1])
     return farmingDict
 
-def levelCalc(start, desired, farming_choice):
+def levelCalc(start, desired, currentExp, farming_choice):
     _msg = ""
     _levels = load_levels()
     _farming = load_farming()
-    exp_start = _levels.get(int(start))
-    exp_desired = _levels.get(int(desired))
-    _exp = exp_desired - exp_start
-    if desired > start:
-        _msg += f"To go from Lv{start} to Lv{desired} will take {_exp:,} runes."
-        if farming_choice:
-            _nexp = _farming.get(farming_choice)
-            _fk = round(_exp/_nexp, 0) + 1
-            _msg += f"\n\nYou'll need to slay {_fk:,.0f} of {farming_choice} to get this amount."
+    exp_start = int(_levels.get(int(start)))
+    exp_desired = int(_levels.get(int(desired)))
+    _exp = int(exp_desired - exp_start)
+    if int(desired) > int(start):
+        if int(currentExp) > 0:
+            _exp = int(_exp - int(currentExp))
+            _msg += f"Counting your {currentExp:,} experience, to go from Lv{start} to Lv{desired} will take {_exp:,} runes."
+            if farming_choice:
+                _nexp = _farming.get(farming_choice)
+                _fk = round(_exp/_nexp, 0) + 1
+                _msg += f"\n\nYou'll need to slay {_fk:,.0f} {farming_choice} to get this amount."
+        else:
+            _msg += f"To go from Lv{start} to Lv{desired} will take {_exp:,} runes."
+            if farming_choice:
+                _nexp = _farming.get(farming_choice)
+                _fk = round(_exp/_nexp, 0) + 1
+                _msg += f"\n\nYou'll need to slay {_fk:,.0f} of {farming_choice} to get this amount."
     else: 
         _msg += f"\nPlease re-adjust the slider to have the desired level be higher than your current level."
 
@@ -167,6 +175,7 @@ with gr.Blocks(theme=theme, title=title) as eldenWisdom:
                 inputs=[
                     gr.Slider(label="Starting Level", value=20, minimum=1, maximum=712, step=1),
                     gr.Slider(label="Desired Level", value=25, minimum=1, maximum=713, step=1),
+                    gr.Number(label="Current Experience", value=0),
                     gr.Radio(choices=load_farming().keys(), label="Farming Choice"),
                 ]
             with gr.Column():
