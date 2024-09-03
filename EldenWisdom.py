@@ -28,14 +28,34 @@ def load_levels():
                 _levels[int(row[0])] = int(row[3].replace(",",""))
     return _levels
 
-def levelCalc(start, desired):
+def load_farming():
+    farmingDict = dict()
+    with open('farming.csv') as csvfile:
+        reader = csv.reader(csvfile)
+        for i, row in enumerate(reader):
+            if i > 0:
+                farmingDict[row[0]] = int(row[1])
+    return farmingDict
+
+def levelCalc(start, desired, farming_choice):
+    _msg = ""
+    _levels = load_levels()
+    _farming = load_farming()
+    exp_start = _levels.get(int(start))
+    exp_desired = _levels.get(int(desired))
+    _exp = exp_desired - exp_start
     if desired > start:
-        _levels = load_levels()
-        exp_start = _levels.get(int(start))
-        exp_desired = _levels.get(int(desired))
-        _exp = exp_desired - exp_start
-        return f"You want to go from Lv{start} to Lv{desired}, which will take {_exp:,} runes."
-    else: return f"Please re-adjust the slider to have the desired level be higher than your current level."
+        _msg += f"To go from Lv{start} to Lv{desired} will take {_exp:,} runes."
+        if farming_choice:
+            _nexp = _farming.get(farming_choice)
+            _fk = round(_exp/_nexp, 0) + 1
+            _msg += f"\n\nYou'll need to slay {_fk:,.0f} of {farming_choice} to get this amount."
+    else: 
+        _msg += f"\nPlease re-adjust the slider to have the desired level be higher than your current level."
+
+    return _msg
+        
+
 
 def calculate(
         CurrentExp,
@@ -113,25 +133,25 @@ with gr.Blocks(theme=theme, title=title) as eldenWisdom:
                 fn=calculate
                 inputs=[
                     gr.Number(label="Current Experience", value=0), #CurrentExp
-                    gr.Slider(label="Number of Golden Rune 1s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_1,
-                    gr.Slider(label="Number of Golden Rune 2s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_2,
-                    gr.Slider(label="Number of Golden Rune 3s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_3,
-                    gr.Slider(label="Number of Golden Rune 4s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_4,
-                    gr.Slider(label="Number of Golden Rune 5s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_5,
-                    gr.Slider(label="Number of Golden Rune 6s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_6,
-                    gr.Slider(label="Number of Golden Rune 7s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_7,
-                    gr.Slider(label="Number of Golden Rune 8s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_8,
-                    gr.Slider(label="Number of Golden Rune 9s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_9,
-                    gr.Slider(label="Number of Golden Rune 10s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_10,
-                    gr.Slider(label="Number of Golden Rune 11s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_11,
-                    gr.Slider(label="Number of Golden Rune 12s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_12,
-                    gr.Slider(label="Number of Golden Rune 13s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_13,
-                    gr.Slider(label="Number of Hero Rune 1s", value=0, minimum=0, maximum=20, step=1), #HeroRune_1,
-                    gr.Slider(label="Number of Hero Rune 2s", value=0, minimum=0, maximum=20, step=1), #HeroRune_2,
-                    gr.Slider(label="Number of Hero Rune 3s", value=0, minimum=0, maximum=20, step=1), #HeroRune_3,
-                    gr.Slider(label="Number of Hero Rune 4s", value=0, minimum=0, maximum=20, step=1), #HeroRune_4,
-                    gr.Slider(label="Number of Hero Rune 5s", value=0, minimum=0, maximum=20, step=1), #HeroRune_5,
-                    gr.Slider(label="Number of Lord Runes", value=0, minimum=0, maximum=10, step=1), #LordRune,
+                    gr.Slider(label="Golden Rune 1s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_1,
+                    gr.Slider(label="Golden Rune 2s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_2,
+                    gr.Slider(label="Golden Rune 3s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_3,
+                    gr.Slider(label="Golden Rune 4s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_4,
+                    gr.Slider(label="Golden Rune 5s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_5,
+                    gr.Slider(label="Golden Rune 6s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_6,
+                    gr.Slider(label="Golden Rune 7s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_7,
+                    gr.Slider(label="Golden Rune 8s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_8,
+                    gr.Slider(label="Golden Rune 9s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_9,
+                    gr.Slider(label="Golden Rune 10s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_10,
+                    gr.Slider(label="Golden Rune 11s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_11,
+                    gr.Slider(label="Golden Rune 12s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_12,
+                    gr.Slider(label="Golden Rune 13s", value=0, minimum=0, maximum=50, step=1), #GoldenRune_13,
+                    gr.Slider(label="Hero Rune 1s", value=0, minimum=0, maximum=20, step=1), #HeroRune_1,
+                    gr.Slider(label="Hero Rune 2s", value=0, minimum=0, maximum=20, step=1), #HeroRune_2,
+                    gr.Slider(label="Hero Rune 3s", value=0, minimum=0, maximum=20, step=1), #HeroRune_3,
+                    gr.Slider(label="Hero Rune 4s", value=0, minimum=0, maximum=20, step=1), #HeroRune_4,
+                    gr.Slider(label="Hero Rune 5s", value=0, minimum=0, maximum=20, step=1), #HeroRune_5,
+                    gr.Slider(label="Lord Runes", value=0, minimum=0, maximum=10, step=1), #LordRune,
                 ]
                 
             with gr.Column():
@@ -139,13 +159,15 @@ with gr.Blocks(theme=theme, title=title) as eldenWisdom:
                 outputs=[gr.Textbox(label="Output", lines=2)]
                 submit = gr.Button("Submit")
                 submit.click(fn, inputs, outputs)
+
     with gr.Tab("LEVELS"):
         fn=levelCalc
         with gr.Row():
             with gr.Column():
                 inputs=[
                     gr.Slider(label="Starting Level", value=20, minimum=1, maximum=712, step=1),
-                    gr.Slider(label="Desired Level", value=25, minimum=1, maximum=713, step=1)
+                    gr.Slider(label="Desired Level", value=25, minimum=1, maximum=713, step=1),
+                    gr.Radio(choices=load_farming().keys(), label="Farming Choice"),
                 ]
             with gr.Column():
                 gr.TextArea(label="How to Use", value="This section is meant to show how much experience you need to go from one level to the one you'd like to be at.")
