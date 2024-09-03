@@ -124,7 +124,7 @@ def calculate(
     else: return f"Your Selected runes will add up to {_summed_exp:,} experience."
     #return tabulate.tabulate(data, headers='firstrow', tablefmt='simple')
 
-with gr.Blocks(theme=theme, title=title) as eldenWisdom:
+with gr.Blocks(theme=theme, title=title, show_api=False) as eldenWisdom:
     gr.Markdown("# " + title)
     gr.Markdown("### Please find the tabs below to help inform you about necessities in Elden Ring.")
     with gr.Tab("RUNES"):
